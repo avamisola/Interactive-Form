@@ -38,3 +38,23 @@ $("#design").change(function() {
 });
 
 //
+let $total = 0;
+$(".activities").append("<label for='total'></label>");
+$(".activities input").change(function() {
+    const $activityName = $(this).attr("name");
+    const $dataCost = parseInt($(this).attr("data-cost"));
+    const $dayTime = $(this).attr("data-day-and-time");
+    if ($(this).prop("checked")) {
+        $total += $dataCost;
+    } else {
+        $total -= $dataCost;
+    }
+    $("label[for='total']").text(`Total: $${$total}`);
+    $(".activities input").each(function() {
+        
+    });
+    console.log($dayTime);
+});
+
+
+//$(".activities").append("<label for='total'>"+`Total: $${$total}`+"</label>");
