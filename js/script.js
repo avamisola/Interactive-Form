@@ -69,27 +69,27 @@ $(".activities input").change(function() {
 //show and hide div based on payment method
 $("#payment option[value='select method']").hide();
 $("#payment").val("credit card").show();
-$("#paypal").hide()
-$("#bitcoin").hide()
+$("#paypal").hide();
+$("#bitcoin").hide();
 $("#payment").change(function() {
     const $paymentMethod = $(this).val();
     if ($paymentMethod == "credit card") {
-        $("#credit-card").show()
-        $("#paypal").hide()
-        $("#bitcoin").hide()
+        $("#credit-card").show();
+        $("#paypal").hide();
+        $("#bitcoin").hide();
     } else if ($paymentMethod == "paypal") {
-        $("#credit-card").hide()
-        $("#paypal").show()
-        $("#bitcoin").hide()
+        $("#credit-card").hide();
+        $("#paypal").show();
+        $("#bitcoin").hide();
     } else if ($paymentMethod == "bitcoin") {
-        $("#credit-card").hide()
-        $("#paypal").hide()
-        $("#bitcoin").show()
+        $("#credit-card").hide();
+        $("#paypal").hide();
+        $("#bitcoin").show();
     }
 });
 
 //form validation and error messages
-$("form").submit(function(event){
+$("form").submit(function(event) {
     //reset error count and remove error messages
     let $errorCount = 0;
     $(".error").remove();
@@ -111,20 +111,46 @@ $("form").submit(function(event){
         $errorCount += 1;
     }
     //at least one activity must be selected
-    const $activityChecked = false;
+    let $activityChecked = false;
     $(".activities input").each(function() {
         if ($(this).prop("checked")) {
             $activityChecked = true;
         }
-        if ($activityChecked == false) {
-            if ($("#activity-error").length == 0) {
-                $(".activities legend").append("<p class='error' id='activity-error'></p>");
-                $("#activity-error").text("At least one activity must be selected!");
+    });
+    if ($activityChecked == false) {
+        if ($("#activity-error").length == 0) {
+            $(".activities legend").append("<p class='error' id='activity-error'></p>");
+            $("#activity-error").text("At least one activity must be selected!");
+        }
+        $errorCount += 1;
+    }
+    //if payment method is credit card, then regex test input field values
+    if ($("#payment").val() == "credit card") {
+        const $cardNumber = /^\d{13,16}$/;
+        if ($cardNumber.test($("#cc-num").val()) == false) {
+            if ($("#cc-num-error").length == 0) {
+                $("label[for='cc-num']").append("<p class='error' id='cc-num-error'></p>");
+                $("#cc-num-error").text("Card Number must be 13 to 16 digits!");
             }
             $errorCount += 1;
         }
-    });
-
+        const $zipCode = /^\d{5}$/;
+        if ($zipCode.test($("#zip").val()) == false) {
+            if ($("#zip-error").length == 0) {
+                $("label[for='zip']").append("<p class='error' id='zip-error'></p>");
+                $("#zip-error").text("Zip Code must be 5 digits!");
+            }
+            $errorCount += 1;
+        }
+        const $cvv = /^\d{3}$/;
+        if ($cvv.test($("#cvv").val()) == false) {
+            if ($("#cvv-error").length == 0) {
+                $("label[for='cvv']").append("<p class='error' id='cvv-error'></p>");
+                $("#cvv-error").text("CVV must be 3 digits!");
+            }
+            $errorCount += 1;
+        }
+    }   
     //if any error, prevent form submission
     if ($errorCount > 0) {
         event.preventDefault();
