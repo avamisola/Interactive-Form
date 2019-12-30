@@ -64,4 +64,27 @@ $(".activities input").change(function() {
     });
 });
 
+//show and hide div based on payment method
+$("#payment option[value='select method']").hide();
+$("#payment").val("credit card").show();
+$("#paypal").hide()
+$("#bitcoin").hide()
+$("#payment").change(function() {
+    console.log($(this).val());
+    const $paymentMethod = $(this).val();
+    if ($paymentMethod == "credit card") {
+        $("#credit-card").show()
+        $("#paypal").hide()
+        $("#bitcoin").hide()
+    } else if ($paymentMethod == "paypal") {
+        $("#credit-card").hide()
+        $("#paypal").show()
+        $("#bitcoin").hide()
+    } else if ($paymentMethod == "bitcoin") {
+        $("#credit-card").hide()
+        $("#paypal").hide()
+        $("#bitcoin").show()
+    }
+});
+
 //
