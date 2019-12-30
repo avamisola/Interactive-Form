@@ -70,7 +70,6 @@ $("#payment").val("credit card").show();
 $("#paypal").hide()
 $("#bitcoin").hide()
 $("#payment").change(function() {
-    console.log($(this).val());
     const $paymentMethod = $(this).val();
     if ($paymentMethod == "credit card") {
         $("#credit-card").show()
@@ -88,3 +87,35 @@ $("#payment").change(function() {
 });
 
 //
+$("form").submit(function(event){
+    let $errorCount = 0;
+    console.log($("#name-error").length);
+    if ($("#name").val() == "") {
+        if ($("#name-error").length == 0) {
+            $("label[for='name']").append("<p class='error' id='name-error'></p>");
+            $("#name-error").text("Name cannot be blank!");
+        }
+        $errorCount += 1;
+    }
+    if ($("#mail").val() == "") {
+        $("label[for='mail']").append("<p class='error' id='blank-email-error'></p>");
+        $("#blank-email-error").text("Email cannot be blank!");
+        $errorCount += 1;
+        //console.log($("#mail").val());
+    } else {
+        const $mailCheck = /^[\w]+[@][\w]+[.][\w]+$/;
+        //console.log($mailCheck.test($("#mail")));
+        if ($mailCheck.test($("#mail") = false)) {
+            $("label[for='mail']").append("<p class='error' id='invalid-email-error'></p>");
+            $("#invalid-email-error").text("Invalid email!");
+            $errorCount += 1;
+        }
+    }
+
+    if ($errorCount > 0) {
+        event.preventDefault();
+        
+    }
+
+
+});
