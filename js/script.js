@@ -45,12 +45,14 @@ $(".activities input").change(function() {
     const $activityName = $(this).attr("name");
     const $dataCost = parseInt($(this).attr("data-cost"));
     const $dayTime = $(this).attr("data-day-and-time");
+    //add or subtract from total based on checkbox status
     if ($(this).prop("checked")) {
         $total += $dataCost;
     } else {
         $total -= $dataCost;
     }
     $("label[for='total']").text(`Total: $${$total}`);
+    //loop through checkboxes to disable time conflicts
     $(".activities input").each(function() {
         $activityNameCheck = $(this).attr("name");
         $dayTimeCheck = $(this).attr("data-day-and-time");  
@@ -86,10 +88,12 @@ $("#payment").change(function() {
     }
 });
 
-//
+//form validation and error messages
 $("form").submit(function(event){
+    //reset error count and remove error messages
     let $errorCount = 0;
-    console.log($("#name-error").length);
+    $(".error").remove();
+    //name cannot be blank
     if ($("#name").val() == "") {
         if ($("#name-error").length == 0) {
             $("label[for='name']").append("<p class='error' id='name-error'></p>");
@@ -97,25 +101,32 @@ $("form").submit(function(event){
         }
         $errorCount += 1;
     }
-    if ($("#mail").val() == "") {
-        $("label[for='mail']").append("<p class='error' id='blank-email-error'></p>");
-        $("#blank-email-error").text("Email cannot be blank!");
+    //email must follow regex pattern
+    const $mailCheck = /^[\w]+[@][\w]+[.][\w]+$/;
+    if ($mailCheck.test($("#mail").val()) == false) {
+        if ($("#mail-error").length == 0) {
+            $("label[for='mail']").append("<p class='error' id='mail-error'></p>");
+            $("#mail-error").text("Invalid email!");
+        }
         $errorCount += 1;
-        //console.log($("#mail").val());
-    } else {
-        const $mailCheck = /^[\w]+[@][\w]+[.][\w]+$/;
-        //console.log($mailCheck.test($("#mail")));
-        if ($mailCheck.test($("#mail") = false)) {
-            $("label[for='mail']").append("<p class='error' id='invalid-email-error'></p>");
-            $("#invalid-email-error").text("Invalid email!");
+    }
+    //at least one activity must be selected
+    const $activityChecked = false;
+    $(".activities input").each(function() {
+        if ($(this).prop("checked")) {
+            $activityChecked = true;
+        }
+        if ($activityChecked == false) {
+            if ($("#activity-error").length == 0) {
+                $(".activities legend").append("<p class='error' id='activity-error'></p>");
+                $("#activity-error").text("At least one activity must be selected!");
+            }
             $errorCount += 1;
         }
-    }
+    });
 
+    //if any error, prevent form submission
     if ($errorCount > 0) {
         event.preventDefault();
-        
     }
-
-
 });
