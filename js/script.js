@@ -1,4 +1,4 @@
-//treehouse fullstack javascript project 3: inteactive form
+//treehouse fullstack javascript project 3: interactive form
 
 //put name field in focus state
 $("#name").focus();
@@ -37,10 +37,11 @@ $("#design").change(function() {
     }
 });
 
-//
+//calculate total activity cost and disable checkboxes where time conflicts
 let $total = 0;
 $(".activities").append("<label for='total'></label>");
 $(".activities input").change(function() {
+    const $activity = $(this)
     const $activityName = $(this).attr("name");
     const $dataCost = parseInt($(this).attr("data-cost"));
     const $dayTime = $(this).attr("data-day-and-time");
@@ -51,10 +52,16 @@ $(".activities input").change(function() {
     }
     $("label[for='total']").text(`Total: $${$total}`);
     $(".activities input").each(function() {
-        
+        $activityNameCheck = $(this).attr("name");
+        $dayTimeCheck = $(this).attr("data-day-and-time");  
+        if ($activityName != $activityNameCheck && $dayTime == $dayTimeCheck) {
+            if ($activity.prop("checked")) {
+                $(this).attr("disabled", true);
+            } else {
+                $(this).attr("disabled", false);
+            }
+        }
     });
-    console.log($dayTime);
 });
 
-
-//$(".activities").append("<label for='total'>"+`Total: $${$total}`+"</label>");
+//
